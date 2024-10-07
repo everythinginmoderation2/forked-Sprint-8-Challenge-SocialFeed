@@ -1,7 +1,5 @@
 package com.bloomtech.socialfeed;
 
-import com.bloomtech.socialfeed.models.User;
-import com.bloomtech.socialfeed.observerpattern.OUserFeed;
 import com.bloomtech.socialfeed.observerpattern.SourceFeed;
 
 public class App {

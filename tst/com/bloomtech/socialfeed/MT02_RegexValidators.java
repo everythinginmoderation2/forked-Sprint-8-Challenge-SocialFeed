@@ -119,7 +119,6 @@ public class MT02_RegexValidators {
         user.setUsername("Fineusername");
         user.setPassword("GoodPass123");
         user.setEmail("bade@mail");
-
         assertThrows(EmailValidationException.class, ()->{
             userService.save(user);
         });
