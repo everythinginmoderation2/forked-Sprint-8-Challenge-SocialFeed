@@ -16,10 +16,12 @@ public class User {
     //transient properties are not written to JSON
     private transient OUserFeed userFeed;
 
+
     public User() {
         following = new ArrayList<>();
         userFeed = new OUserFeed(this);
     }
+
 
     public String getUsername() {
         return username;
