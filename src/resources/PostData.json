@@ -1,17 +1,22 @@
 [
   {
     "username": "Leader",
-    "postedon": "2024-10-08T20:08:36.722748900",
+    "postedon": "2024-10-09T12:52:30.5266298",
     "body": "Welcome everyone!"
   },
   {
     "username": "Follower",
-    "postedon": "2024-10-08T20:08:36.726814800",
+    "postedon": "2024-10-09T12:52:30.5296292",
     "body": "I am so excited to hear everything leader has to say!"
   },
   {
     "username": "Loner",
-    "postedon": "2024-10-08T20:08:36.739117700",
+    "postedon": "2024-10-09T12:52:30.5416938",
     "body": "I am not interested in what anyone has to say but myself"
+  },
+  {
+    "username": "Testuser",
+    "postedon": "2024-10-09T12:52:30.5514459",
+    "body": "test post"
   }
 ]

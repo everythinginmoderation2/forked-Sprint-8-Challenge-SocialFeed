@@ -1,5 +1,6 @@
 package com.bloomtech.socialfeed.repositories;
 
+import com.bloomtech.socialfeed.helpers.LocalDateTimeAdapter;
 import com.bloomtech.socialfeed.models.Post;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,8 @@ public class PostRepository {
     public List<Post> getAllPosts() {
         List<Post> allPosts = new ArrayList<>();
         //Create Gson instance
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
 
         //Define the type for the ArrayList<Post>
         Type postListType = new TypeToken<List<Post>>() {}.getType();
@@ -66,7 +69,9 @@ public class PostRepository {
 
         //Write the new Post data to the PostData.json file
         try (FileWriter postDataWriter = new FileWriter(POST_DATA_PATH)) {
-            Gson postDataGSON = new GsonBuilder().setPrettyPrinting().create();
+            Gson postDataGSON = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .setPrettyPrinting().create();
             String json = postDataGSON.toJson(allPosts);
             postDataWriter.write(json);
 
