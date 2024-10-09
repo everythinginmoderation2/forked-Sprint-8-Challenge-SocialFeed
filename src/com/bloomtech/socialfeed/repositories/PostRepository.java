@@ -1,9 +1,17 @@
 package com.bloomtech.socialfeed.repositories;
 
 import com.bloomtech.socialfeed.models.Post;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PostRepository {
@@ -13,8 +21,26 @@ public class PostRepository {
     }
 
     public List<Post> getAllPosts() {
-        //TODO: return all posts from the PostData.json file
-        return new ArrayList<>();
+        List<Post> allPosts = new ArrayList<>();
+        //Create Gson instance
+        Gson gson = new Gson();
+
+        //Define the type for the ArrayList<Post>
+        Type postListType = new TypeToken<List<Post>>() {}.getType();
+
+        //Read JSON file and parse it
+        try (FileReader reader = new FileReader(POST_DATA_PATH)) {
+            List<Post> posts = gson.fromJson(reader, postListType);
+            if (posts != null) {
+                allPosts.addAll(posts); // Safely add posts if parsing was successful
+            }
+        } catch (IOException e) {
+            //FIXME: This should probably be replaced with more robust logging
+            e.printStackTrace();
+        }
+
+
+        return allPosts;
     }
 
     public List<Post> findByUsername(String username) {
@@ -25,12 +51,32 @@ public class PostRepository {
     }
 
     public List<Post> addPost(Post post) {
-        List<Post> allPosts = new ArrayList<>();
+        List<Post> allPosts = getAllPosts();
+
+        //Check that no duplicate posts are added to the allPosts list
+        Optional<Post> existingPost = allPosts.stream()
+                        .filter(p -> p.getBody().equals(post.getBody()))
+                        .findFirst();
+
+        //Throw error if attempt is made to add duplicate post to allPosts list
+        if (!existingPost.isEmpty()) {
+            throw new RuntimeException("Post with body: " + post.getBody() + " already exists!");
+        }
         allPosts.add(post);
 
-        //TODO: Write the new Post data to the PostData.json file
+        //Write the new Post data to the PostData.json file
+        try (FileWriter postDataWriter = new FileWriter(POST_DATA_PATH)) {
+            Gson postDataGSON = new GsonBuilder().setPrettyPrinting().create();
+            String json = postDataGSON.toJson(allPosts);
+            postDataWriter.write(json);
 
-        //TODO: Return an updated list of all posts
+        } catch (IOException e) {
+            //FIXME: This should probably be replaced with more robust logging
+            e.printStackTrace();
+        }
+
+
+        //Return an updated list of all posts
         return allPosts;
     }
 }

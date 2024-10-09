@@ -21,6 +21,8 @@ public class UserRepository {
     public UserRepository() {
     }
 
+
+
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
 
@@ -45,6 +47,7 @@ public class UserRepository {
         return allUsers;
     }
 
+
     public Optional<User> findByUsername(String username) {
         return getAllUsers()
                 .stream()
@@ -52,13 +55,17 @@ public class UserRepository {
                 .findFirst();
     }
 
+
+
     public void save(User user) {
         List<User> allUsers = getAllUsers();
 
+        //Check that no duplicate users are added to the allUsers list
         Optional<User> existingUser = allUsers.stream()
                 .filter(u -> u.getUsername().equals(user.getUsername()))
                 .findFirst();
 
+        //Throw error if attempt is made to add duplicate user to allUsers list
         if (!existingUser.isEmpty()) {
             throw new RuntimeException("User with name: " + user.getUsername() + " already exists!");
         }
